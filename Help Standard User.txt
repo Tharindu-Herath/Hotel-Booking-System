@@ -1,0 +1,7 @@
+You are able to view and update all your personal details as well as view your latest booking.
+
+If you are a new user or just don't have a booking, it will show '-' in all fields. 
+
+You can also add/edit a review about your expieriences at our B&B. Please note, to save your Review you have to verify and press the save button UNDER THE REVIEW PAGE. Pressing Save at the bottom of the screen saves your personal details, not your review.
+
+or press "View Contact Details" to find out about the different ways to get in touch with us.

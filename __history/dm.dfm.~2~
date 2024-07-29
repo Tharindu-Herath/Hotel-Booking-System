@@ -1,0 +1,6 @@
+object pat: Tpat
+  OldCreateOrder = True
+  OnCreate = DataModuleCreate
+  Height = 505
+  Width = 668
+end

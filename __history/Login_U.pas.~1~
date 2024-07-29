@@ -1,0 +1,698 @@
+// '{}' - Notes for Teacher
+// '//' - Personal Notes
+unit Login_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, pngimage, ExtCtrls, jpeg, ComCtrls, clsValidation, ShellAPI;
+
+type
+  TfrmLogin = class(TForm)
+    ShapeViewRooms: TShape;
+    ShapePasswordLogin: TShape;
+    lblNoAcc: TLabel;
+    lblEmailLogin: TLabel;
+    lblPasswordLogin: TLabel;
+    imgViewRooms: TImage;
+    lblView: TLabel;
+    lblLoginText: TLabel;
+    edtEmailLogin: TEdit;
+    edtPasswordLogin: TEdit;
+    imgHelpLogin: TImage;
+    ShapeHelpLogin: TShape;
+    ShapeIDLogin: TShape;
+    ShapeLogin: TShape;
+    lblLogin: TLabel;
+    lblSignUp: TLabel;
+    imgVisible: TImage;
+    ShapeVisible: TShape;
+    imgLogo: TImage;
+    imgNext: TImage;
+    Timer1: TTimer;
+    pnlBlueLogin: TPanel;
+    pnlRedLogin: TPanel;
+    imgBack: TImage;
+    lblEmailErrorLogin: TLabel;
+    lblPasswordErrorLogin: TLabel;
+    ShapeExit: TShape;
+    btnExist: TButton;
+    imgBlue: TImage;
+    imgLoginBack: TImage;
+    Shape1: TShape;
+    ScrollBar: TScrollBar;
+    pnlReviews: TPanel;
+    lblTopReviews: TLabel;
+    lblReviewName1: TLabel;
+    redReview1: TRichEdit;
+    lblReviewName2: TLabel;
+    redReview2: TRichEdit;
+    pnlMove: TPanel;
+    imgRed: TImage;
+    lblByAccepting: TLabel;
+    lblTC: TLabel;
+    lblWebsite: TLabel;
+    procedure btnSignInClick(Sender: TObject);
+    procedure btnCreateClick(Sender: TObject);
+    procedure lblSignUpMouseEnter(Sender: TObject);
+    procedure lblSignUpMouseLeave(Sender: TObject);
+    procedure lblSignUpClick(Sender: TObject);
+    procedure lblLoginClick(Sender: TObject);
+    procedure edtEmailLoginClick(Sender: TObject);
+    procedure edtPasswordLoginClick(Sender: TObject);
+    procedure lblLoginMouseEnter(Sender: TObject);
+    procedure lblLoginMouseLeave(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure imgVisibleClick(Sender: TObject);
+    procedure imgVisibleMouseEnter(Sender: TObject);
+    procedure imgVisibleMouseLeave(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure imgNextClick(Sender: TObject);
+    procedure imgBackClick(Sender: TObject);
+    procedure imgViewRoomsMouseEnter(Sender: TObject);
+    procedure imgViewRoomsMouseLeave(Sender: TObject);
+    procedure imgViewRoomsClick(Sender: TObject);
+    procedure btnExistClick(Sender: TObject);
+    procedure ScrollBarChange(Sender: TObject);
+    procedure imgHelpLoginMouseEnter(Sender: TObject);
+    procedure imgHelpLoginMouseLeave(Sender: TObject);
+    procedure edtPasswordLoginChange(Sender: TObject);
+    procedure lblTCMouseLeave(Sender: TObject);
+    procedure lblTCMouseEnter(Sender: TObject);
+    procedure lblWebsiteMouseEnter(Sender: TObject);
+    procedure lblWebsiteMouseLeave(Sender: TObject);
+    procedure lblWebsiteClick(Sender: TObject);
+    procedure lblTCClick(Sender: TObject);
+    procedure imgHelpLoginClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure EmptyLogin;
+    procedure ResetLogin;
+  end;
+
+var
+  frmLogin: TfrmLogin;
+
+  objValidate : TValidate;
+
+  lblReviewName3, lblReviewName4, lblReviewName5: TLabel;
+  redReview3, redReview4, redReview5: TRichEdit;
+
+  sEmailLogin, sPasswordLogin : string;
+  bClicked : Boolean;
+
+{2D Array - Used for Reviews}
+  arrReview: Array[1..5, 1..2] of string;
+
+  bForward : Boolean;
+
+  bAdmin : Boolean;
+
+implementation
+
+uses
+  dm, Admin_U, PickDate_U, PalmWoods_U, CreateAccount_U, Booking_U, Help_U,
+  ContactDetails_U, StandardUser_U;
+
+{$R *.dfm}
+
+procedure TfrmLogin.btnCreateClick(Sender: TObject);
+begin
+  Self.Hide;
+  frmRegister.Show;
+end;
+
+procedure TfrmLogin.btnExistClick(Sender: TObject);
+var
+  iLeave: ShortInt;
+
+begin
+ iLeave:= MessageDlg('Are you sure you want to exit?', mtConfirmation, mbYesNo, 0);
+
+  if iLeave = mrYes then
+  begin
+    Application.Terminate;
+  end;
+end;
+
+procedure TfrmLogin.btnSignInClick(Sender: TObject);
+begin
+  if True then
+  begin
+    Self.Hide;
+    frmPalmWoods.Show;
+  end;
+end;
+
+procedure TfrmLogin.edtEmailLoginClick(Sender: TObject);
+begin
+  EmptyLogin;
+{Clears the edit box so the user can enter their details without deleting text}
+
+  if edtEmailLogin.Text = 'Email' then
+  begin
+    edtEmailLogin.Text := '';
+    lblEmailLogin.Visible := TRUE;
+  end;
+end;
+
+procedure TfrmLogin.edtPasswordLoginChange(Sender: TObject);
+begin
+  if (edtPasswordLogin.Text <> '') AND (edtPasswordLogin.Text <> 'Password') then
+    bClicked := TRUE;
+{Sets boolean value to TRUE to help set the correct PasswordChar}
+end;
+
+procedure TfrmLogin.edtPasswordLoginClick(Sender: TObject);
+var
+  tFile : TextFile;
+  sLine : string;
+  iAutofill : ShortInt;
+
+begin
+  EmptyLogin;
+{Clears the edit box so the user can enter their details without deleting text}
+
+  if (edtPasswordLogin.Text = 'Password') AND (bCLicked = False) then
+  begin
+    edtPasswordLogin.Text := '';
+    lblPasswordLogin.Visible := TRUE;
+    edtPasswordLogin.PasswordChar:= '*';
+
+    AssignFile(tFile, 'Saved.txt');
+    Reset(tFile);
+
+    while not Eof(tFile) do
+    begin
+      Readln(tFile, sLine);
+
+      if Copy(sLine, 1, Pos('#', sLine) - 1) = edtEmailLogin.Text then
+      begin
+        iAutofill := MessageDlg('Do you want to autofill your saved password?', mtConfirmation, mbYesNo, 0);
+
+        if iAutofill = mrYes then
+        begin
+          Delete(sLine, 1, Pos('#', sLine));
+          edtPasswordLogin.Text := sLine;
+        end;
+      end;
+    end;
+
+    CloseFile(tFile);
+  end;
+end;
+
+{Clears the edit box so the user can enter their details without deleting text}
+procedure TfrmLogin.EmptyLogin;
+begin
+  if edtEmailLogin.Text = '' then
+  begin
+    edtEmailLogin.Text := 'Email';
+    lblEmailLogin.Visible := FALSE;
+    lblEmailErrorLogin.Caption := '';
+  end;
+
+  if edtPasswordLogin.Text = '' then
+  begin
+    edtPasswordLogin.Text := 'Password';
+    lblPasswordLogin.Visible := FALSE;
+    edtPasswordLogin.PasswordChar:= #0;
+  end;
+end;
+
+procedure TfrmLogin.FormShow(Sender: TObject);
+var
+  R: ShortInt;
+
+begin
+  bForward := TRUE;
+  bCLicked := FALSE;
+
+  lblReviewName3 := TLabel.Create(pnlMove);
+  lblReviewName4 := TLabel.Create(pnlMove);
+  lblReviewName5 := TLabel.Create(pnlMove);
+  redReview3 := TRichEdit.Create(pnlMove);
+  redReview4 := TRichEdit.Create(pnlMove);
+  redReview5 := TRichEdit.Create(pnlMove);
+
+  lblReviewName3.Height := 24;
+  lblReviewName4.Height := 24;
+  lblReviewName5.Height := 24;
+  redReview3.Height := 125;
+  redReview4.Height := 125;
+  redReview5.Height := 125;
+
+  redReview3.Width := 269;
+  redReview4.Width := 269;
+  redReview5.Width := 269;
+
+  lblReviewName3.Left := 94;
+  lblReviewName4.Left := 94;
+  lblReviewName5.Left := 94;
+  redReview3.Left := 94;
+  redReview4.Left := 94;
+  redReview5.Left := 94;
+
+  lblReviewName3.Top := 370;
+  redReview3.Top := 406;
+  lblReviewName4.Top := 555;
+  redReview4.Top := 591;
+  lblReviewName5.Top := 740;
+  redReview5.Top := 776;
+
+  lblReviewName3.Parent := pnlMove;
+  lblReviewName4.Parent := pnlMove;
+  lblReviewName5.Parent := pnlMove;
+  redReview3.Parent := pnlMove;
+  redReview4.Parent := pnlMove;
+  redReview5.Parent := pnlMove;
+
+  redReview1.Lines.Clear;
+  redReview2.Lines.Clear;
+  redReview3.Lines.Clear;
+  redReview4.Lines.Clear;
+  redReview5.Lines.Clear;
+
+  redReview3.Color := $00A45B75;
+  redReview4.Color := $00A45B75;
+  redReview5.Color := $00A45B75;
+
+  lblReviewName3.Font.Size := 15;
+  lblReviewName4.Font.Size := 15;
+  lblReviewName5.Font.Size := 15;
+  redReview3.Font.Size := 10;
+  redReview4.Font.Size := 10;
+  redReview5.Font.Size := 10;
+
+  lblReviewName3.Font.Style := [fsBold];
+  lblReviewName4.Font.Style := [fsBold];
+  lblReviewName5.Font.Style := [fsBold];
+
+  lblReviewName3.Font.Color := clWhite;
+  lblReviewName4.Font.Color := clWhite;
+  lblReviewName5.Font.Color := clWhite;
+  redReview3.Font.Color := clWhite;
+  redReview4.Font.Color := clWhite;
+  redReview5.Font.Color := clWhite;
+
+  redReview1.ScrollBars := ssVertical;
+  redReview2.ScrollBars := ssVertical;
+  redReview3.ScrollBars := ssVertical;
+  redReview4.ScrollBars := ssVertical;
+  redReview5.ScrollBars := ssVertical;
+
+  R := 1;
+
+  with pat do
+  begin
+    tblClients.First;
+
+    while not tblClients.Eof do
+    begin
+      if tblClients['ShowReview'] = True then
+      begin
+        arrReview[R, 1] := tblClients['FirstNames'];
+        arrReview[R, 2] := tblClients['Review'];
+        Inc(R);
+      end;
+
+      tblClients.Next;
+    end;
+  end;
+
+  lblReviewName1.Caption := arrReview[1, 1];
+  lblReviewName2.Caption := arrReview[2, 1];
+  lblReviewName3.Caption := arrReview[3, 1];
+  lblReviewName4.Caption := arrReview[4, 1];
+  lblReviewName5.Caption := arrReview[5, 1];
+  redReview1.Lines.Add(arrReview[1, 2]);
+  redReview2.Lines.Add(arrReview[2, 2]);
+  redReview3.Lines.Add(arrReview[3, 2]);
+  redReview4.Lines.Add(arrReview[4, 2]);
+  redReview5.Lines.Add(arrReview[5, 2]);
+
+  redReview1.ReadOnly := True;
+  redReview2.ReadOnly := True;
+  redReview3.ReadOnly := True;
+  redReview4.ReadOnly := True;
+  redReview5.ReadOnly := True;
+
+  lblLogin.Width := 291;
+  pnlBlueLogin.Width := 475;
+
+  ResetLogin;
+{Sets all components to default values}
+
+  pnlBlueLogin.SetFocus;
+end;
+
+procedure TfrmLogin.imgBackClick(Sender: TObject);
+begin
+  Timer1.Enabled := TRUE;
+end;
+
+procedure TfrmLogin.imgHelpLoginClick(Sender: TObject);
+begin
+  Self.Enabled := False;
+  sHelpForm := 'Login';
+  frmHelp.Show;
+end;
+
+procedure TfrmLogin.imgHelpLoginMouseEnter(Sender: TObject);
+begin
+  ShapeHelpLogin.Brush.Color := $00864D00;
+end;
+
+procedure TfrmLogin.imgHelpLoginMouseLeave(Sender: TObject);
+begin
+  ShapeHelpLogin.Brush.Color := clSilver;
+end;
+
+procedure TfrmLogin.imgViewRoomsClick(Sender: TObject);
+begin
+  bLogin := False;
+
+  Self.Hide;
+  frmPickDate.Show;
+end;
+
+procedure TfrmLogin.imgViewRoomsMouseEnter(Sender: TObject);
+begin
+  ShapeViewRooms.Brush.Color := $00864D00;
+end;
+
+procedure TfrmLogin.imgViewRoomsMouseLeave(Sender: TObject);
+begin
+  ShapeViewRooms.Brush.Color := clSilver;
+end;
+
+procedure TfrmLogin.imgNextClick(Sender: TObject);
+begin
+  Timer1.Enabled := TRUE;
+end;
+
+procedure TfrmLogin.imgVisibleClick(Sender: TObject);
+begin
+  if bClicked = FALSE then
+  begin
+    //DO NOTHING
+  end
+
+  else if edtPasswordLogin.PasswordChar = '*' then
+  begin
+    imgVisible.Picture.LoadFromFile('Images\Visible Off.png');
+    edtPasswordLogin.PasswordChar:= #0;
+  end
+
+  else
+  begin
+    imgVisible.Picture.LoadFromFile('Images\Visible On.png');
+    edtPasswordLogin.PasswordChar:= '*';
+  end;
+
+end;
+
+procedure TfrmLogin.imgVisibleMouseEnter(Sender: TObject);
+begin
+  ShapeVisible.Visible := TRUE;
+end;
+
+procedure TfrmLogin.imgVisibleMouseLeave(Sender: TObject);
+begin
+  ShapeVisible.Visible := FALSE;
+end;
+
+procedure TfrmLogin.lblLoginClick(Sender: TObject);
+var
+  bEmail, bPassword, bActivated, bExist : Boolean;
+  tFile : TextFile;
+  iViewContact, iSavePassword : ShortInt;
+  sLine : string;
+
+begin
+  lblEmailErrorLogin.Caption := '';
+  lblPasswordErrorLogin.Caption := '';
+
+  bAdmin := False;
+  bEmail := False;
+  bPassword := False;
+  bActivated := False;
+  bExist := False;
+
+  sEmailLogin := edtEmailLogin.Text;
+  sPasswordLogin := edtPasswordLogin.Text;
+
+  with pat do
+  begin
+    tblClients.First;
+
+    while not tblClients.Eof do
+    begin
+
+      if (sEmailLogin = tblClients['Email']) then
+      begin
+        bEmail := TRUE;
+
+        if (sPasswordLogin = tblClients['Password']) then
+        begin
+          bPassword := TRUE;
+
+          if tblClients['Admin'] = True then
+          begin
+            AssignFile(tFile, 'TEMP.txt');
+            Rewrite(tFile);
+            Writeln(tFile, edtEmailLogin.Text);
+            CloseFile(tFile);
+
+            Self.Hide;
+            frmAdmin.Show;
+            ResetLogin;
+            bLogin := True;
+            bAdmin := True;
+          end; //if Admin
+
+        end; //if Password
+
+        if tblClients['Activated'] = True then
+            bActivated := True;
+      end; //if Email
+
+      tblClients.Next;
+    end; //while
+  end; //with
+  //If Email & Password Exist
+
+  if bAdmin = False then
+  begin
+    if (bEmail = TRUE) AND (bPassword = TRUE) AND (bActivated = TRUE) then
+    begin
+      AssignFile(tFile, 'TEMP.txt');
+      Rewrite(tFile);
+      Writeln(tFile, edtEmailLogin.Text);
+      CloseFile(tFile);
+
+      AssignFile(tFile, 'Saved.txt');
+      Reset(tFile);
+
+      while not Eof(tFile) do
+      begin
+        Readln(tFile, sLine);
+
+        if Copy(sLine, 1, Pos('#', sLine) - 1) = edtEmailLogin.Text then
+          bExist := True;
+      end;
+
+      CloseFile(tFile);
+
+      if bExist = False then
+      begin
+        iSavePassword := MessageDlg('Do you want to save your password for easy login in future?' + #13 +
+                   'We are not liable for any loss/leak of your password.', mtConfirmation, mbYesNo, 0);
+
+        if iSavePassword = mrYes then
+        begin
+          AssignFile(tFile, 'Saved.txt');
+          Append(tFile);
+          Writeln(tFile, edtEmailLogin.Text + '#' + edtPasswordLogin.Text);
+          CloseFile(tFile);
+
+          MessageDlg('Password saved', mtInformation, [mbOK], 0);
+        end
+
+        else
+          MessageDlg('Password not saved', mtInformation, [mbOK], 0);
+
+      end;
+      //if email doesn't exist in saved passwords
+
+      ResetLogin;
+      Self.Hide;
+      frmStdUser.Show;
+      bLogin := True;
+    end
+
+    else if (bEmail = TRUE) AND (bActivated = FALSE) then
+    begin
+      MessageDlg('Account deactivated. Please contact us to re-activate', mtError, [mbOK], 0);
+
+      iViewContact := MessageDlg('Do you want to view our contact details?', mtInformation, mbYesNo, 0);
+
+      if iViewContact = mrYes then
+      begin
+        iForm := 4;
+        Self.Hide;
+        frmContactDetails.Show;
+      end;
+    end
+
+    else if (bEmail = FALSE) then
+    begin
+      MessageDlg('Email does not exist', mtError, [mbOK], 0);
+      lblEmailErrorLogin.Caption := 'Incorrect Email';
+    end
+
+    else if (bPassword = FALSE) then
+    begin
+      MessageDlg('Invalid Password', mtError, [mbOK], 0);
+      lblPasswordErrorLogin.Caption := 'Incorrect Password';
+    end;
+
+  end;
+end;
+
+procedure TfrmLogin.lblLoginMouseEnter(Sender: TObject);
+begin
+  ShapeLogin.Brush.Color := clHighlight;
+end;
+
+procedure TfrmLogin.lblLoginMouseLeave(Sender: TObject);
+begin
+  ShapeLogin.Brush.Color := $00864D00;
+end;
+
+procedure TfrmLogin.lblSignUpClick(Sender: TObject);
+begin
+
+  Self.Hide;
+  frmRegister.Show;
+end;
+
+procedure TfrmLogin.lblSignUpMouseEnter(Sender: TObject);
+begin
+  lblSignUp.Font.Color := clRed;
+end;
+
+procedure TfrmLogin.lblSignUpMouseLeave(Sender: TObject);
+begin
+  lblSignUp.Font.Color := $00FF0080;
+end;
+
+{Shows T's and C's}
+procedure TfrmLogin.lblTCClick(Sender: TObject);
+var
+  tFile : TextFile;
+  sEULA, sLine  : string;
+  bFirstLine : Boolean;
+
+begin
+  sEULA := '';
+  sLine := '';
+  bFirstLine := False;
+
+  AssignFile(tFile, 'EULA.txt');
+  Reset(tFile);
+
+  while not Eof(tFile) do
+  begin
+    Readln(tFile, sLine);
+
+    if sLine = '' then
+      sEULA := sEULA + #13
+
+    else if bFirstLine = False then
+    begin
+      bFirstLine := True;
+      sEULA := sLine;
+    end
+
+    else
+      sEULA := sEULA + #13 + sLine;
+  end;
+
+  CloseFile(tFile);
+
+  MessageDlg(sEULA, mtConfirmation, [mbOK], 0);
+end;
+
+procedure TfrmLogin.lblTCMouseEnter(Sender: TObject);
+begin
+  lblTC.Font.Color := clHighlight;
+  lblTC.Font.Style := [fsUnderline];
+end;
+
+procedure TfrmLogin.lblTCMouseLeave(Sender: TObject);
+begin
+  lblTC.Font.Color := $00864D00;
+  lblTC.Font.Style := [];
+end;
+
+procedure TfrmLogin.lblWebsiteClick(Sender: TObject);
+begin
+  ShellExecute(HInstance, 'open', PChar('https://bit.ly/PalmWoods'), nil, nil, SW_NORMAL);
+end;
+
+procedure TfrmLogin.lblWebsiteMouseEnter(Sender: TObject);
+begin
+  lblWebsite.Font.Color := clBlack;
+  lblWebsite.Font.Style := [fsUnderline];
+end;
+
+procedure TfrmLogin.lblWebsiteMouseLeave(Sender: TObject);
+begin
+  lblWebsite.Font.Color := clSilver;
+  lblWebsite.Font.Style := [];
+end;
+
+procedure TfrmLogin.ResetLogin;
+begin
+  lblEmailErrorLogin.Caption := '';
+  lblPasswordErrorLogin.Caption := '';
+  edtEmailLogin.Text := 'Email';
+  edtPasswordLogin.Text := 'Password';
+  edtPasswordLogin.PasswordChar := #0;
+  imgVisible.Picture.LoadFromFile('Images\Visible On.png');
+  pnlBlueLogin.Width := 475;
+  bClicked := False;
+end;
+
+procedure TfrmLogin.ScrollBarChange(Sender: TObject);
+begin
+  pnlMove.Top := -(ScrollBar.Position);
+end;
+
+{For animation between the Blue and Red panels}
+procedure TfrmLogin.Timer1Timer(Sender: TObject);
+var
+  I: Integer;
+
+begin
+  if pnlBlueLogin.Width = 475 then
+  begin
+    pnlBlueLogin.Width := 0;
+  end
+
+  else
+  begin
+    for I := 1 to 475 do
+    begin
+      pnlBlueLogin.Width := pnlBlueLogin.Width + 1;
+    end;
+  end;
+
+  Timer1.Enabled:= FALSE;
+end;
+
+end.

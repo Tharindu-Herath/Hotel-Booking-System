@@ -1,0 +1,9 @@
+As an admin, you have the ability to change almost everything in the database.
+
+If you are a staff member and have general enquiries, please contact the owner for help. If he is unable to help or if you are the owner or have any technical enquiries, please contact the developer (Dushriq)
+
+He's details are as follows: 
+Cell: 082 090 3311
+Email: dushriqlutchman@gmail.com
+
+Also note that when adding/removing reviews shown on the login page, make sure you are have 5 reviews shown before you exit. Otherwise it will reset to those shown before you edited.

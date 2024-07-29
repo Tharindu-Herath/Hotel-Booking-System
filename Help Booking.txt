@@ -1,0 +1,9 @@
+You can view your final Booking Details here. 
+
+If you are unhappy with the details, you can go back and change it.
+
+If you are fine with these, you can enter your card info on the bottom right.
+
+Your details will be verified and if there's no problems, a button to confirm booking will appear.
+
+When you ready, you may click the Confirm Booking button, but if you go back, all the infomation you entered about your card details will be lost

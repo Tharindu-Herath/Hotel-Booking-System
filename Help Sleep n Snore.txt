@@ -1,0 +1,8 @@
+When you first open this page, it will show all the rooms on the First Level of the B&B. To see the rooms on Level 2, press Level 2.
+
+To view information about a room, hover your mouse over the image and it will show the Price, Level and Room Description. It will say if it's available or not based on the date you chose on the previous screen.
+You can change the dates on the top right.
+
+The little dots on the top right of every room shows the availabilty of the room. If it's RED, the room is not available. If it's GREEN, the room is available. This makes it more convient for you to compare rooms that are available.
+
+If you require more help, please feel free to contact us. You can view our details by clicking "View Contact Details"
