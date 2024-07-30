@@ -60,8 +60,6 @@ type
     procedure lblTCMouseEnter(Sender: TObject);
     procedure lblTCClick(Sender: TObject);
     procedure imgHelpLoginClick(Sender: TObject);
-    procedure ShapeLoginContextPopup(Sender: TObject; MousePos: TPoint;
-      var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -491,12 +489,6 @@ begin
 end;
 
 procedure TfrmLogin.ResetLogin;
-begin
-
-end;
-
-procedure TfrmLogin.ShapeLoginContextPopup(Sender: TObject; MousePos: TPoint;
-  var Handled: Boolean);
 begin
 
 end;
